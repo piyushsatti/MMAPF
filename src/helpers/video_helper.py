@@ -35,22 +35,22 @@ def video_writer_init(file_name, size, args, clear=False):
     if ~clear:
         outVideo_writer = {
             f'true_res' : cv2.VideoWriter(
-                f'{file_name}_true.avi', 
-                cv2.VideoWriter_fourcc(*'MJPG'), 
+                f'{file_name}_true.mp4', 
+                cv2.VideoWriter_fourcc(*'H264'), 
                 30,
                 size
                 ),
             f'noisy_res' : cv2.VideoWriter(
-                f'{file_name}_noisy.avi', 
-                cv2.VideoWriter_fourcc(*'MJPG'), 
+                f'{file_name}_noisy.mp4', 
+                cv2.VideoWriter_fourcc(*'H264'), 
                 30,
                 size
                 )
         }
         for arg in args:
             outVideo_writer[f'{file_name}_{arg.__name__}'] = cv2.VideoWriter(
-                f'{file_name}_{arg.__name__}.avi', 
-                cv2.VideoWriter_fourcc(*'MJPG'), 
+                f'{file_name}_{arg.__name__}.mp4', 
+                cv2.VideoWriter_fourcc(*'H264'), 
                 30,
                 size
             )
@@ -59,12 +59,11 @@ def video_writer_init(file_name, size, args, clear=False):
         for key in outVideo_writer.keys():
             outVideo_writer[key].release()
 
-def video_processing(dataset:DatasetHandler, *args):
+def video_processing(dataset:DatasetHandler, frame_segment_length=30, *denoising_functions):
     '''
     Takes the dataset object and uses the video
     processing to create and store the video
     '''
-    denoising_functions = args
     inVideo = {}
     outVideo_writer = {}
     for flag, file_path, size, *img_channels in dataset.video_frame_handler():
@@ -84,8 +83,8 @@ def video_processing(dataset:DatasetHandler, *args):
         q = mp.Manager().Queue()
         for frame_number in range(1, len(inVideo[file_name].keys())+1):
             frame_data_list.append(inVideo[file_name][frame_number])
-            task_number = frame_number // 40
-            if frame_number % 40 == 0:
+            task_number = frame_number // frame_segment_length
+            if frame_number % frame_segment_length == 0:
                 procs.append(mp.Process(target=video_multi_frame_processing, args=(task_number, q, denoising_functions, frame_data_list)))
                 frame_data_list = []
         procs.append(mp.Process(target=video_multi_frame_processing, args=(task_number+1, q, denoising_functions, frame_data_list)))

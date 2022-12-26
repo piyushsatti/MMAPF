@@ -10,6 +10,7 @@ class DatasetHandler:
     '''
     def __init__(self, rel_path:str) -> None:
         self.path = os.path.join(os.getcwd(), rel_path)
+        self.rel_path = rel_path
         self.files:dict = {}
         self.sort_files()
 
@@ -22,7 +23,7 @@ class DatasetHandler:
         for (root,dirs,files) in os.walk(self.path, topdown=True):
             for file in files:
                 file_path = os.path.join(os.path.join(self.path, root, file))
-                if root .endswith('Black and White'):
+                if root.endswith('Black and White'):
                     files_dict['bnw_images'].append(file_path)
                 elif root.endswith('Colored'):
                     files_dict['clr_images'].append(file_path)

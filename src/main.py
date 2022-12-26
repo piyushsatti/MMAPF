@@ -2,8 +2,8 @@ import os, sys, cv2, numpy as np, time
 import multiprocessing as mp
 
 # Project module imports
-from helpers.bnw_helper import bnw_processing
-from helpers.clr_helper import clr_processing
+from helpers.bnw_helper import process_bnw_dataset
+from helpers.clr_helper import process_clr_dataset
 from helpers.video_helper import video_processing
 from classes.DatasetHandler import DatasetHandler
 
@@ -13,13 +13,9 @@ from filters.MMAPF import MMAPF
 
 def main(data_set_dir:str='Test Images'):
     dataset = DatasetHandler(data_set_dir)
-
-    # Should be able to recreate the folder structure and save file to that
-    
-    
-    bnw_test = bnw_processing(dataset, SMF, MMAPF)
-    clr_test = clr_processing(dataset, SMF, MMAPF)
-    video_test = video_processing(dataset, SMF, MMAPF)
+    process_bnw_dataset(8, dataset, SMF, MMAPF)
+    process_clr_dataset(8, dataset, SMF, MMAPF)
+    # video_test = video_processing(dataset, SMF, MMAPF)
 
 if __name__ == "__main__": 
     main('Test Data') 
