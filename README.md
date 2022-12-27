@@ -1,7 +1,7 @@
 # Min-Max Average Pooling Filter for Impulse Noise Removal
 [Piyush Satti](https://scholar.google.com/citations?user=eR10c10AAAAJ&hl=en&oi=ao), [Nikhil Sharma](https://scholar.google.com/citations?user=wVlxsrsAAAAJ&hl=en), [Bharat Garg](https://scholar.google.com/citations?user=M_NAbSkAAAAJ&hl=en)
 ---
-*The source paper[^1] to this implementation can be found [here.](https://ieeexplore.ieee.org/abstract/document/9169792)* If one wishes to fork and run the demo for oneself, one may directly jump to [here.](#How-to-Run-the-Demo?) A [task list](#task-list) details the steps taken to arrive to the current state of this repo.
+*The source paper[^1] to this implementation can be found [here.](https://ieeexplore.ieee.org/abstract/document/9169792)and the output can be accessed using [this](https://drive.google.com/drive/folders/1fY4z9iJNKcULx3sQ-NiPTcknWT21KHPh?usp=sharing) link.* If one wishes to fork and run the demo for oneself, one may directly jump to [here.](#How-to-Run-the-Demo?) A [task list](#task-list) details the steps taken to arrive to the current state of this repo.
 
 [^1]: DOI:10.1109/LSP.2020.3016868
 
@@ -11,6 +11,9 @@
 ### Results and Comparisons: On what basis is the comparison made?
 #### Black and White Images
 #### Colored Images
+| Noise % | True Image | Noisy Image | SMF Filter | MMAPF Image |
+| --- | --- | --- | --- | --- |
+| ![Noisy 20%](/Sample-Images/house_50/MMAPF.tiff) |  |  |  | |
 #### Colored Video
 # How to Run the Demo?
 The code is developed and tested in [python 3.10](https://www.python.org/downloads/release/python-3100/), and the various modules imported have been version locked in the [requirements.txt](requirements.txt) file. To run the demo, it is not required but recommended to use virtual enviornments and steps to do the same has been touched upon below. **It is also recommended to** ***not*** **run the video processing** unless you are willing to commit a couple of hours to the processing (someone please optimize that [kek](https://en.wiktionary.org/wiki/kek#:~:text=Rhymes%3A%20%2D%C9%9Bk-,Interjection,to%20indicate%20laughter%20or%20humour.)).
