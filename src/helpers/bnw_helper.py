@@ -55,7 +55,7 @@ def process_bnw_dataset(max_num_proc, dataset:DatasetHandler, *denoising_functio
         # a foreverloop until the number of processes fall below the maximum allowed number of processes
         while [proc.is_alive() for proc in procs].count(True) >= max_num_proc:
             # sleep for 1 second for a process to auto-join
-            time.sleep(1)
+            time.sleep(2)
             # continue after 1 second
             continue
     

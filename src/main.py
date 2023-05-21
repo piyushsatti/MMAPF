@@ -1,5 +1,5 @@
-import os, sys, cv2, numpy as np, time
-import multiprocessing as mp
+import os, sys, time
+import numpy as np, multiprocessing as mp
 
 # Project module imports
 from helpers.bnw_helper import process_bnw_dataset
@@ -15,7 +15,7 @@ def main(data_set_dir:str='Test Images'):
     dataset = DatasetHandler(data_set_dir)
     process_bnw_dataset(8, dataset, SMF, MMAPF)
     process_clr_dataset(8, dataset, SMF, MMAPF)
-    # video_test = video_processing(dataset, SMF, MMAPF)
+    video_test = video_processing(dataset, SMF, MMAPF)
 
 if __name__ == "__main__": 
-    main('Test Data') 
+    main('data\\test_data')
