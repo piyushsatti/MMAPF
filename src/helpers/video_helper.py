@@ -35,22 +35,22 @@ def video_writer_init(file_name, size, args, clear=False):
     if ~clear:
         outVideo_writer = {
             f'true_res' : cv2.VideoWriter(
-                f'{file_name}_true.mp4', 
-                cv2.VideoWriter_fourcc(*'H264'), 
+                f'{file_name.split(".")[0]}_true.mp4', 
+                cv2.VideoWriter_fourcc(*'mp4v'), 
                 30,
                 size
                 ),
             f'noisy_res' : cv2.VideoWriter(
-                f'{file_name}_noisy.mp4', 
-                cv2.VideoWriter_fourcc(*'H264'), 
+                f'{file_name.split(".")[0]}_noisy.mp4', 
+                cv2.VideoWriter_fourcc(*'mp4v'), 
                 30,
                 size
                 )
         }
         for arg in args:
             outVideo_writer[f'{file_name}_{arg.__name__}'] = cv2.VideoWriter(
-                f'{file_name}_{arg.__name__}.mp4', 
-                cv2.VideoWriter_fourcc(*'H264'), 
+                f'{file_name.split(".")[0]}_{arg.__name__}.mp4', 
+                cv2.VideoWriter_fourcc(*'mp4v'), 
                 30,
                 size
             )
@@ -59,7 +59,7 @@ def video_writer_init(file_name, size, args, clear=False):
         for key in outVideo_writer.keys():
             outVideo_writer[key].release()
 
-def video_processing(dataset:DatasetHandler, frame_segment_length=30, *denoising_functions):
+def video_processing(dataset:DatasetHandler, frame_segment_length:int=30, *denoising_functions):
     '''
     Takes the dataset object and uses the video
     processing to create and store the video

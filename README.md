@@ -56,12 +56,15 @@ That's, about it. A folder by the name of `Test Data Out` should be created in t
 Delete the folder. Everything was saved and operated upon locally so there is no bloatware that persists. Also, would love to hear feedback and merge changes if someone spends the time to make this better (:3)[https://opensource.org/].
 
 # Task List
+
+## General Tasks
 - [ ] Flow of the README
   - [ ] Problem statement
   - [ ] How widespread is the problem + Affected domains
   - [ ] Usual solutions
   - [ ] Proposed Solution
     - [ ] Along with diagram of the concept and source idea
+  - [ ] Dataset used and backlinks to the source files for the datasets
   - [x] Demonstration
     - [x] Improvement images (colored and gray), and video
   - [x] Metrics that are reproducable by forking
@@ -79,3 +82,22 @@ Delete the folder. Everything was saved and operated upon locally so there is no
   - [ ] LinkedIn post with the research paper, GitHub link and an example
   - [ ] Twitter Post tweeting the implementation and the paper link
   - [ ] Making a YouTube video for the implementation
+
+## Bugs and Issues
+- [ ] Video Processor Not Working
+  - [ ] Video Processor needs OS specific file format and encoder additions
+  - [ ] Video Processor needs file process updates like a bar that fills according to how much progress made
+- [ ] Format the code with a goal specific architecture
+  - [ ] Use folders for bnw, clr, and video processing and its classes
+- [ ] Output Formatting
+  - [ ] Output Files need better formatting and clarity
+    - [ ] Output files should add to the `data` folder
+      - [ ] Better I/O organisation
+        - [ ] Option for selecting a `input` folder should be provided with auto-sorting of the input data into types
+        - [ ] Option for a destination folder should be provided and should be separated from `sample_data`
+      - [x] test_input should contain sample testing data (should be limited to 1-2 image of each kind)
+      - [ ] test_output should contain a subset of outputs ideally processed from test_input
+    - [ ] <image_name>_<size>_<true | noisy>_<0 for true image | 1 for noisy image | noise_density between 0 and 1 for filtered image>_<filter_used>
+
+## Ideas
+- [ ] Videos are intensive processes. The Video section should be converted to handle Gifs instead. Provides better GitHub README.md integration as well.
