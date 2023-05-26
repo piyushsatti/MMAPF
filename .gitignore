@@ -129,4 +129,4 @@ dmypy.json
 .pyre/
 
 # Test Output Data
-Test Data Out/
+sample_data/test_output
