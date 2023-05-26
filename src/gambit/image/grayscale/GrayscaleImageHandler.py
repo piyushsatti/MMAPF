@@ -1,13 +1,16 @@
-from helpers.DatasetHandler import DatasetHandler
+import cv2
+from gambit.helpers.DatasetHandler import DatasetHandler
 
-class GrayscaleImageHandler (DatasetHandler(abs_path)):
+class GrayscaleImageHandler (DatasetHandler):
     
     def __init__(self, abs_path:str):
         super().__init__(abs_path)
+        self.load_file_names()
     
     def grayscale_image_handler(self) -> None:
         '''
-        Yields an ImageHandler object
+        Yields three ImageHandler objects, one for each
+        R, G, and B channels
         '''
-        for file in self.files['bnw_images']:
-            yield file, ImageHandler(cv2.imread(file, 0))
+        for file_path in self.file_paths:
+            yield file_path, cv2.imread(file_path, 0)

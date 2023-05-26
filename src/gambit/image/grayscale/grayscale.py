@@ -1,62 +1,79 @@
-import os, cv2, multiprocessing as mp, time
-from classes.DatasetHandler import DatasetHandler
+import os, time, datetime, cv2, numpy as np, multiprocessing as mp
+from gambit.image.grayscale.GrayscaleImageHandler import GrayscaleImageHandler
+from gambit.helpers.image_functions import add_noise_to_image, write_output_image
 
-def write_output_images(rel_path, file_name, outImgs):
-    folder_name = os.path.split(rel_path)[-1]
-    new_folder_name = folder_name + ' Out'
-    file_to_folder_name = file_name.split('.')[0]
-    path = os.path.join(os.getcwd(), new_folder_name, 'Black and White', file_to_folder_name)
-    if ~os.path.exists(path):
-        try:
-            os.makedirs(path)
-        except Exception as e:
-            print(f"--- Exception in {file_name} ---\n{e}")
-    for key in outImgs.keys():
-        cv2.imwrite(
-            os.path.join(path, f'{key}.tif'),
-            outImgs[key]
-        )
-
-def process_bnw_dataset_instance(rel_path, file_path, img, args) -> None:
+def process_grayscale_image(file_path, output_data_abs_path, grayscale_img, noise_factor, denoising_functions):
     '''
     Takes the dataset object and uses the bnw
     generator to process and store the images
     '''
-    file_name = os.path.split(file_path)[-1]
-    start_time = time.time()
-    img.add_noise()
-    outImg = {
-        f'true_image': img.Img,
-        f'noisy_image': img.nImg
-    }
-    for arg in args:
-        outImg[f'{arg.__name__}'] = arg(img.nImg)
-    print(f"--- Took {time.time() - start_time} seconds to denoise {file_name} ---")
-    write_output_images(rel_path, file_name, outImg)
-
-def process_bnw_dataset(max_num_proc, dataset:DatasetHandler, *denoising_functions):
+    complete_path_as_list = os.path.split(file_path)
+    file_name = complete_path_as_list[-1]
+    file_extension = '.tif'
+    shape = grayscale_img.shape
+    # Generating the noisy image
+    n_img = add_noise_to_image(
+        img=grayscale_img,
+        noise_type='s&p',
+        noise_factor=noise_factor
+    )
+    # Writing the true and noisy image
+    write_output_image(
+        os.path.join(
+            output_data_abs_path, 
+            f'{file_name.split("_")[0]}_{grayscale_img.shape[0]}_{grayscale_img.shape[1]}_grayscale_true_0' + file_extension
+        ), 
+        grayscale_img
+    )
+    write_output_image(
+        os.path.join(
+            output_data_abs_path, 
+            f'{file_name.split("_")[0]}_{grayscale_img.shape[0]}_{grayscale_img.shape[1]}_grayscale_noisy_1'  + file_extension
+        ), 
+        n_img
+    )
+    # denoising and writing the filtered images
+    for denoising_function in denoising_functions:
+        write_output_image(
+            os.path.join(
+                output_data_abs_path, 
+                f'{file_name.split("_")[0]}_{grayscale_img.shape[0]}_{grayscale_img.shape[1]}_grayscale_noisy_{noise_factor}_{denoising_function.__name__}'  + file_extension
+            ), 
+            denoising_function(n_img)
+        )
+    
+def grayscale_dataset_process_handler(
+    input_data_abs_path, 
+    output_data_abs_path,
+    max_number_of_processes, 
+    noise_factor, 
+    *denoising_functions
+):
     '''
-    Takes the dataset object and uses the clr
+    Takes the dataset object and uses the grayscale
     generator to create and store the images
     using multiprocessing python module
     '''
     procs = []
-    for file_path, img in dataset.bnw_image_handler():
-        rel_path = dataset.rel_path
-        # process_clr_dataset_instance(dataset=dataset, file_path=file_path, img_channels=img_channels, denoising_functions=denoising_functions)
+    process_start_time = time.time()
+    grayscale_image_handler_instance = GrayscaleImageHandler(input_data_abs_path)
+    for file_path, grayscale_img in grayscale_image_handler_instance.grayscale_image_handler():
         proc = mp.Process(
-            target=process_bnw_dataset_instance, 
-            args=(rel_path, file_path, img, denoising_functions)
+            target=process_grayscale_image, 
+            args=(file_path, output_data_abs_path, grayscale_img, noise_factor, denoising_functions)
         )
-        # start the process, a non-daemon process auto-joins at the end implicitly
         proc.start()
-        # add process to the processes list
         procs.append(proc)
-        # a foreverloop until the number of processes fall below the maximum allowed number of processes
-        while [proc.is_alive() for proc in procs].count(True) >= max_num_proc:
-            # sleep for 1 second for a process to auto-join
-            time.sleep(2)
-            # continue after 1 second
+        while [proc.is_alive() for proc in procs].count(True) >= max_number_of_processes:
+            time.sleep(1)
             continue
-    
     [proc.join() for proc in procs]
+    process_end_time = time.time()
+    process_start_date = datetime.datetime.fromtimestamp(process_start_time)
+    process_end_date = datetime.datetime.fromtimestamp(process_end_time)
+    time_taken = time.strftime(
+        "%H:%M:%S", 
+        time.gmtime(
+            process_end_time - process_start_time
+    ))
+    print(f'Start Date: {process_start_date}\nEnd Date: {process_end_date}\nTime Taken: {time_taken}')
