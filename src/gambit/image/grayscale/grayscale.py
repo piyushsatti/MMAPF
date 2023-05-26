@@ -42,7 +42,7 @@ def process_grayscale_image(file_path, output_data_abs_path, grayscale_img, nois
             denoising_function(n_img)
         )
     
-def grayscale_dataset_process_handler(
+def grayscale_image_dataset_process_handler(
     input_data_abs_path, 
     output_data_abs_path,
     max_number_of_processes, 

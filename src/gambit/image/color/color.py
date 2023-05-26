@@ -43,7 +43,7 @@ def process_color_image(file_path, output_data_abs_path, color_img, noise_factor
             filter_output_image
         )
 
-def color_dataset_process_handler(
+def color_image_dataset_process_handler(
     input_data_abs_path, 
     output_data_abs_path,
     max_number_of_processes, 
