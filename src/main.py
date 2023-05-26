@@ -2,8 +2,8 @@ import os, sys, time
 import numpy as np, multiprocessing as mp
 
 # Project module imports
-from lib.image.color.color import color_dataset_process_handler
-from lib.user_menu.user_menu import userOptionsMenu
+from gambit.image.color.color import color_dataset_process_handler
+from gambit.user_menu.user_menu import userOptionsMenu
 
 # Filters
 from filters.SMF import SMF
