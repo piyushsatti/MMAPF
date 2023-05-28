@@ -24,7 +24,3 @@ class DatasetHandler:
     
     def __del__(self):
         cv2.destroyAllWindows()
-        
-if __name__ == '__main__':
-    test_image_paths = DatasetHandler('''C:\\Users\\piyus\\Documents\\GitHub\\MMAPF\\sample_data''')
-    print(test_image_paths.file_paths)
