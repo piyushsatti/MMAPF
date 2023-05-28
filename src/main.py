@@ -32,6 +32,7 @@ def main():
                 1,
                 0.3,
                 SMF, MMAPF
+                 
             )
         case 'video':
             video_dataset_process_handler(
